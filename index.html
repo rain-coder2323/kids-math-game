@@ -3,74 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xander's Snack Shop</title>
+    <title>Xander's Math Adventure</title>
     <style>
         body {
             font-family: 'Comic Sans MS', cursive, sans-serif;
-            background-color: #f0faff;
+            background-color: #fff9db;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
             margin: 0;
-            overflow: hidden;
+            touch-action: manipulation;
         }
         #game-container {
             background: white;
-            padding: 30px;
-            border-radius: 25px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            padding: 25px;
+            border-radius: 30px;
+            border: 5px solid #ff922b;
+            box-shadow: 0 10px 0 #f08c00;
             text-align: center;
-            width: 90%;
-            max-width: 500px;
+            width: 85%;
+            max-width: 450px;
         }
-        h1 { color: #ff6b6b; font-size: 2rem; }
+        h1 { color: #f08c00; font-size: 1.8rem; margin: 0; }
         #display-area {
-            font-size: 4rem;
+            font-size: 3.5rem;
             margin: 20px 0;
-            min-height: 100px;
-            letter-spacing: 5px;
+            min-height: 120px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
         }
         .options {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
         }
         button {
-            font-size: 2rem;
-            padding: 20px;
+            font-size: 1.8rem;
+            padding: 15px 5px;
             border: none;
-            border-radius: 15px;
-            background-color: #4ecdc4;
+            border-radius: 12px;
+            background-color: #339af0;
             color: white;
+            font-weight: bold;
             cursor: pointer;
-            transition: transform 0.1s;
+            box-shadow: 0 5px 0 #1c7ed6;
         }
-        button:active { transform: scale(0.9); }
+        button:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #1c7ed6;
+        }
         #message {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             margin-top: 20px;
             height: 30px;
+            color: #51cf66;
             font-weight: bold;
         }
-        .success { color: #45b649; }
-        .celebration { position: absolute; font-size: 3rem; animation: float 2s forwards; }
-        @keyframes float { to { transform: translateY(-200px); opacity: 0; } }
     </style>
 </head>
 <body>
 
 <div id="game-container">
-    <h1>🍎 Snack Shop 🍌</h1>
-    <div id="question">How many do you see?</div>
-    <div id="display-area"></div>
+    <h1>Can you count them?</h1>
+    <div id="display-area" id="display-area"></div>
     <div class="options" id="options"></div>
     <div id="message"></div>
 </div>
 
 <script>
-    const emojis = ["🍎", "🍌", "🍓", "🥕", "🍇", "🍩"];
+    const emojis = ["🚲", "🦖", "🍎", "🦁", "🚗", "🍦", "🐶", "🚀"];
     let currentNumber = 0;
 
     function startGame() {
@@ -82,15 +87,19 @@
         displayArea.innerHTML = "";
         optionsArea.innerHTML = "";
 
-        // Pick a random number between 1 and 6
-        currentNumber = Math.floor(Math.random() * 6) + 1;
+        // Random number 1 to 10
+        currentNumber = Math.floor(Math.random() * 10) + 1;
         const emoji = emojis[Math.floor(Math.random() * emojis.length)];
 
-        // Show the snacks
-        displayArea.innerText = emoji.repeat(currentNumber);
+        // Display the emojis
+        for (let i = 0; i < currentNumber; i++) {
+            const span = document.createElement('span');
+            span.innerText = emoji;
+            displayArea.appendChild(span);
+        }
 
-        // Create buttons 1 to 6
-        for (let i = 1; i <= 6; i++) {
+        // Create buttons 1 to 10
+        for (let i = 1; i <= 10; i++) {
             const btn = document.createElement('button');
             btn.innerText = i;
             btn.onclick = () => checkAnswer(i);
@@ -101,23 +110,17 @@
     function checkAnswer(choice) {
         const message = document.getElementById('message');
         if (choice === currentNumber) {
-            message.innerHTML = "<span class='success'>🌟 GREAT JOB! 🌟</span>";
-            createStars();
-            setTimeout(startGame, 2000);
+            message.innerText = "🌟 WOW! YOU GOT IT! 🌟";
+            // Flash colors for celebration
+            document.body.style.backgroundColor = "#d3f9d8";
+            setTimeout(() => {
+                document.body.style.backgroundColor = "#fff9db";
+                startGame(); // This randomizes the game again
+            }, 1500);
         } else {
-            message.innerText = "Try counting again! 😊";
-        }
-    }
-
-    function createStars() {
-        for(let i=0; i<5; i++) {
-            const star = document.createElement('div');
-            star.className = 'celebration';
-            star.innerText = "⭐";
-            star.style.left = Math.random() * 80 + 10 + "%";
-            star.style.top = "50%";
-            document.body.appendChild(star);
-            setTimeout(() => star.remove(), 2000);
+            message.innerText = "Try counting one more time! 😊";
+            message.style.color = "#ff6b6b";
+            setTimeout(() => { message.style.color = "#51cf66"; }, 1000);
         }
     }
 
@@ -125,6 +128,4 @@
 </script>
 
 </body>
-
 </html>
-
